@@ -1,5 +1,5 @@
 # Multi-stage build
-FROM maven:3.9.6-openjdk-21-slim AS build
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 
 # Set working directory
 WORKDIR /app
@@ -13,15 +13,13 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Production stage
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:17-jre-alpine
 
 # Install necessary packages
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
 # Create app user
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN addgroup -g 1001 -S appuser && adduser -u 1001 -S appuser -G appuser
 
 # Set working directory
 WORKDIR /app

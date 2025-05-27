@@ -1,31 +1,66 @@
-# AIUEducation - Быстрый деплой
+# 🚀 ДЕПЛОЙ AIUEducation НА СЕРВЕР
 
-## 🚀 Деплой за 3 команды
+## ✅ ГОТОВАЯ КОНФИГУРАЦИЯ:
+- **Nginx** на порту 80 
+- **Spring Boot** приложение
+- **PostgreSQL** база данных
+- **Docker Compose** оркестрация
 
-1. **Клонируй проект:**
-   ```bash
-   git clone <your-repo-url>
-   cd aiueducation
-   ```
+## 📋 КОМАНДЫ ДЛЯ ДЕПЛОЯ:
 
-2. **Скопируй настройки:**
-   ```bash
-   cp .env.example .env
-   ```
+### 1. Создай .env файл:
+```bash
+echo "DATABASE_PASSWORD=aiueducation123" > .env
+echo "SPRING_PROFILES_ACTIVE=prod" >> .env  
+echo "DATABASE_USERNAME=aiueducation" >> .env
+echo "DATABASE_NAME=aiueducation_prod" >> .env
+```
 
-3. **Запусти:**
-   ```bash
-   docker-compose up --build -d
-   ```
+### 2. Останови системный nginx (если есть):
+```bash
+sudo systemctl stop nginx
+sudo systemctl disable nginx
+```
 
-## 🎯 Готово!
+### 3. Очисти старые контейнеры:
+```bash
+docker-compose down --remove-orphans
+docker volume rm demo_postgres_data 2>/dev/null || true
+docker system prune -f
+```
 
-- **Сайт:** http://your-server-ip:8080
-- **База данных:** localhost:5432
-- **Логин/пароль БД:** aiueducation/aiueducation123
+### 4. Запусти проект:
+```bash
+docker-compose up --build -d
+```
 
-## 📋 Управление
+### 5. Проверь статус:
+```bash
+docker-compose ps
+curl -I http://localhost
+```
 
+## 🌐 РЕЗУЛЬТАТ:
+- **Сайт**: http://your-server-ip
+- **Nginx**: Порт 80 (HTTP)
+- **Приложение**: Внутренний порт 8080
+- **База данных**: Внутренний порт 5432
+
+## 📊 МОНИТОРИНГ:
+```bash
+# Логи всех сервисов
+docker-compose logs -f
+
+# Логи конкретного сервиса  
+docker-compose logs nginx
+docker-compose logs app
+docker-compose logs db
+
+# Статус контейнеров
+docker-compose ps
+```
+
+## 🔧 УПРАВЛЕНИЕ:
 ```bash
 # Остановить
 docker-compose down
@@ -33,26 +68,16 @@ docker-compose down
 # Перезапустить
 docker-compose restart
 
-# Логи
-docker-compose logs -f
-
-# Статус
-docker-compose ps
+# Обновить код
+git pull && docker-compose up --build -d
 ```
 
-## ⚙️ Настройки
+## ⚡ ОСОБЕННОСТИ:
+- **Автоматический рестарт** контейнеров
+- **Health checks** для приложения
+- **Rate limiting** в Nginx
+- **Security headers** настроены
+- **Gzip сжатие** включено
+- **Логирование** настроено
 
-Измени `.env` если нужно:
-- `DATABASE_PASSWORD` - пароль БД
-- `DATABASE_USERNAME` - пользователь БД
-- `DATABASE_NAME` - имя БД
-
-## 🔧 Требования
-
-- Docker
-- Docker Compose
-- Открытый порт 8080
-
----
-
-**Всё работает из коробки!** 📦 
+## 🎯 ГОТОВО К ПРОДАКШЕНУ! 
