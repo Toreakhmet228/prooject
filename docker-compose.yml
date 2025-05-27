@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: aiueducation-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - uploads:/var/uploads
+    depends_on:
+      - app
+
   app:
     build: .
     container_name: aiueducation-app
@@ -10,8 +22,8 @@ services:
       - DATABASE_URL=jdbc:postgresql://db:5432/${DATABASE_NAME}
       - DATABASE_USERNAME=${DATABASE_USERNAME}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     volumes:
       - uploads:/var/uploads
     depends_on:
@@ -27,8 +39,8 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
 
 volumes:
   postgres_data:
