@@ -10,7 +10,21 @@
 
 ## Варианты запуска
 
-### 1. Быстрый запуск для разработки (рекомендуется)
+### 1. Простой запуск (рекомендуется)
+
+```bash
+# Запуск только приложения и базы данных
+docker-compose -f docker-compose.simple.yml up --build
+
+# Или в фоновом режиме
+docker-compose -f docker-compose.simple.yml up -d --build
+```
+
+**Доступные сервисы:**
+- Приложение: http://localhost:8080
+- PostgreSQL: localhost:5432
+
+### 2. Быстрый запуск для разработки
 
 ```bash
 # Запуск с hot reload и pgAdmin
@@ -25,7 +39,7 @@ docker-compose -f docker-compose.dev.yml up -d --build
 - pgAdmin: http://localhost:5050 (admin@example.com / admin)
 - PostgreSQL: localhost:5432
 
-### 2. Запуск с Nginx (полная конфигурация)
+### 3. Запуск с Nginx (полная конфигурация)
 
 ```bash
 # Запуск с nginx прокси
@@ -38,9 +52,9 @@ docker-compose -f docker-compose.local.yml up -d --build
 **Доступные сервисы:**
 - Nginx (фронт): http://localhost:8080
 - Приложение (прямой доступ): http://localhost:8081
-- PostgreSQL: localhost:5433
+- PostgreSQL: localhost:5435
 
-### 3. Продакшн конфигурация
+### 4. Продакшн конфигурация
 
 ```bash
 # Запуск продакшн версии (требует .env файл)
@@ -51,6 +65,13 @@ docker-compose up --build
 
 ### Подключение к PostgreSQL
 
+**Для простого запуска (docker-compose.simple.yml):**
+- Host: localhost
+- Port: 5432
+- Database: aiueducation_db
+- Username: aiueducation_user
+- Password: aiueducation_pass
+
 **Для разработки (docker-compose.dev.yml):**
 - Host: localhost
 - Port: 5432
@@ -60,7 +81,7 @@ docker-compose up --build
 
 **Для локального тестирования (docker-compose.local.yml):**
 - Host: localhost
-- Port: 5433
+- Port: 5435
 - Database: aiueducation_db
 - Username: aiueducation_user
 - Password: aiueducation_pass

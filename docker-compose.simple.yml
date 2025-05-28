@@ -1,23 +1,11 @@
 version: '3.8'
 
 services:
-  nginx:
-    image: nginx:alpine
-    container_name: aiueducation-nginx-local
-    restart: unless-stopped
-    ports:
-      - "8080:80"  # Изменил порт для избежания конфликтов
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - uploads:/var/uploads
-    depends_on:
-      - app
-
   app:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: aiueducation-app-local
+    container_name: aiueducation-app-simple
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=dev
@@ -25,26 +13,25 @@ services:
       - DATABASE_USERNAME=aiueducation_user
       - DATABASE_PASSWORD=aiueducation_pass
     ports:
-      - "8081:8080"  # Прямой доступ к приложению для отладки
+      - "8080:8080"
     volumes:
       - uploads:/var/uploads
-      - ./src:/app/src:ro  # Для hot reload (если нужно)
     depends_on:
       db:
         condition: service_healthy
 
   db:
     image: postgres:15-alpine
-    container_name: aiueducation-db-local
+    container_name: aiueducation-db-simple
     restart: unless-stopped
     environment:
       - POSTGRES_DB=aiueducation_db
       - POSTGRES_USER=aiueducation_user
       - POSTGRES_PASSWORD=aiueducation_pass
     ports:
-      - "5435:5432"  # Изменил порт на 5435 для избежания конфликтов
+      - "5432:5432"
     volumes:
-      - postgres_data_local:/var/lib/postgresql/data
+      - postgres_data_simple:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U aiueducation_user -d aiueducation_db"]
@@ -53,5 +40,5 @@ services:
       retries: 5
 
 volumes:
-  postgres_data_local:
+  postgres_data_simple:
   uploads: 
