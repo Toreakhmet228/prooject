@@ -52,11 +52,4 @@ public class AuthController {
             return "register";
         }
     }
-
-    // Страница с кнопкой выхода (если нужна отдельная)
-    @GetMapping("/profile")
-    public String profile(Model model) {
-        // сюда можно добавить информацию о пользователе
-        return "profile";
-    }
 }

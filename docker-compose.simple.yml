@@ -39,6 +39,18 @@ services:
       timeout: 5s
       retries: 5
 
+  # Adminer - простая веб-админка для БД (как Django Admin)
+  adminer:
+    image: adminer:latest
+    container_name: aiueducation-adminer-simple
+    restart: unless-stopped
+    ports:
+      - "8090:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+    depends_on:
+      - db
+
 volumes:
   postgres_data_simple:
   uploads: 
